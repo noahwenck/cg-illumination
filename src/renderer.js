@@ -6,6 +6,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { RawTexture } from '@babylonjs/core/Materials/Textures/rawTexture';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Vector2, Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { KeyboardEventTypes } from '@babylonjs/core/Events/keyboardEvents';
 
 class Renderer {
     constructor(canvas, engine, material_callback, ground_mesh_callback) {
@@ -22,6 +23,19 @@ class Renderer {
                 ambient: new Color3(0.2, 0.2, 0.2),
                 lights: [],
                 models: []
+            },
+            {
+                scene: new Scene(this.engine),
+                background_color: new Color4(0.1, 0.1, 0.1, 1.0),
+                materials: null,
+                ground_subdivisions: [50, 50],
+                ground_mesh: null,
+                camera: null,
+                ambient: new Color3(0.2, 0.2, 0.2),
+                lights: [],
+                models: []
+
+
             }
         ];
         this.active_scene = 0;
@@ -94,9 +108,11 @@ class Renderer {
         sphere.material = materials['illum_' + this.shading_alg];
         current_scene.models.push(sphere);
 
-
+        this.addKeyBinds(scene);
         // Animation function - called before each frame gets rendered
         scene.onBeforeRenderObservable.add(() => {
+
+            
             // update models and lights here (if needed)
             // ...
 
@@ -104,6 +120,10 @@ class Renderer {
             this.updateShaderUniforms(scene_idx, materials['illum_' + this.shading_alg]);
             this.updateShaderUniforms(scene_idx, materials['ground_' + this.shading_alg]);
         });
+    }
+
+    createScene1(scene_idx){
+        console.log("test");
     }
 
     updateShaderUniforms(scene_idx, shader) {
@@ -154,6 +174,39 @@ class Renderer {
         console.log(idx);
         this.active_light = idx;
     }
+
+    addKeyBinds(scene){
+        scene.onKeyboardObservable.add((kbInfo) => {
+            if (kbInfo.type == KeyboardEventTypes.KEYDOWN){
+                switch (kbInfo.event.key){
+                    case "a":
+                        console.log("a");
+                        break;
+                    
+                    case "s":
+                        console.log("s");
+                        break;
+
+                    case "d":
+                        console.log("d");
+                        break;
+                
+                    case "w":
+                        console.log("w");
+                        break;
+                    
+                    case "r":
+                        console.log("r");
+                        break;
+
+                    case "f":
+                        console.log("f");
+                        break;
+                }
+            }
+          });
+    }
+
 }
 
 export { Renderer }
