@@ -16,13 +16,19 @@ uniform vec3 camera_position;
 // lights
 uniform vec3 ambient; // Ia
 uniform int num_lights;
+
 uniform vec3 light_positions[8];
-uniform vec3 light_colors[8]; // Ip
+uniform vec3 light_colors[8]; 
+
+
+// uniform vec3 light_positions[8];
+// uniform vec3 light_colors[8]; // Ip 
 
 // Output
 out vec4 FragColor;
 
 void main() {
     // Color
+    // vec3 mat_color = light_colors * mat_color;
     FragColor = vec4(mat_color * texture(mat_texture, model_uv).rgb, 1.0);
 }

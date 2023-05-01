@@ -119,6 +119,8 @@ class Renderer {
         });
         shader.setArray3('light_positions', light_positions);
         shader.setColor3Array('light_colors', light_colors);
+        console.log(shader);
+        
     }
 
     getActiveScene() {
