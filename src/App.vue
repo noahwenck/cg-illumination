@@ -5,9 +5,7 @@ import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { ShaderMaterial } from '@babylonjs/core/Materials/shaderMaterial';
 import { Vector2 } from '@babylonjs/core/Maths/math.vector';
-
 import { Renderer } from './renderer'
-
 export default {
     data() {
         return {
@@ -34,7 +32,6 @@ export default {
             });
             return basic_mat;
         },
-
         createGroundMaterial(name, shader_path, scene) {
             let ground_mat = new ShaderMaterial(name, scene, shader_path, {
                 attributes: ['position', 'uv'],
@@ -57,7 +54,6 @@ export default {
             });
             return ground_mat;
         },
-
         createGroundModel(name, subdivisions, scene) {
             let ground = new Mesh(name, scene);
             let vertex_positions = [];
@@ -77,16 +73,13 @@ export default {
                     }
                 }
             }
-
             let vertex_data = new VertexData();
             vertex_data.positions = vertex_positions;
             vertex_data.uvs = vertex_texcoords;
             vertex_data.indices = triangle_indices;
             vertex_data.applyToMesh(ground);
-
             return ground;
         },
-
         changeScene(event) {
             let scene_idx = parseInt(event.target.value.substring(5));
             this.renderer.setActiveScene(scene_idx);
@@ -95,12 +88,10 @@ export default {
         selectShadingAlgorithm(event) {
             this.renderer.setShadingAlgorithm(event.target.value);
         },
-
         updateHeightScale(event) {
             this.height_scale = event.target.value / 10.0
             this.renderer.setHeightScale(this.height_scale);
         },
-
         selectLightIdx(event) {
             let light_idx = parseInt(event.target.value.substring(5));
             this.renderer.setActiveLight(light_idx);
@@ -111,21 +102,16 @@ export default {
         const canvas = document.getElementById('renderCanvas');
         canvas.width = 992;
         canvas.height = 558;
-
         // Create a WebGL 2 rendering context
         const gl = canvas.getContext('webgl2');
         if (!gl) {
             alert('Error: Browser does not support WebGL2 Canvas');
             return;
         }
-
         // Associate a Babylon Render Engine to it.
         const engine = new Engine(gl);
-
         // Create our Renderer
         this.renderer = new Renderer(canvas, engine, (scene) => {
-
-            
             let illum_gouraud = this.createBasicMaterial('illum_gouraud', '/shaders/illum_gouraud', scene);
             let illum_phong = this.createBasicMaterial('illum_phong', '/shaders/illum_phong', scene);
             let ground_gouraud = this.createGroundMaterial('ground_gouraud', '/shaders/ground_gouraud', scene);
@@ -139,7 +125,6 @@ export default {
         }, (scene, subdivisions) => {
             return this.createGroundModel('ground', subdivisions, scene);
         });
-
         // Render every frame
         engine.runRenderLoop(() => {
             this.renderer.getActiveScene().render();
@@ -174,12 +159,10 @@ export default {
 label, input, select, option {
     font-size: 1rem;
 }
-
 #userInterface {
     width: 100%;
     padding: 0.5rem 0 0.75rem 0;
 }
-
 .spaceRight {
     margin-right: 2rem;
 }

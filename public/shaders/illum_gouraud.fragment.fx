@@ -27,6 +27,7 @@ out vec3 diffuse_illum;
 out vec3 specular_illum;
 
 void main() {
+<<<<<<< HEAD
     // Normal Transformation and Other Vectors
     mat3 normTransform = inverse(transpose(mat3(world)));
     vec3 n = normalize(normTransform * normal);
@@ -48,3 +49,13 @@ void main() {
     // Transform and project vertex from 3D world-space to 2D screen-space
     gl_Position = projection * view * world * vec4(position, 1.0);
 }
+=======
+    vec3 model_color = mat_color * texture(mat_texture, model_uv).rgb;
+
+    vec3 dIllum = diffuse_illum * model_color;
+    vec3 sIllum = specular_illum * mat_specular;
+    vec3 aIllum = ambient * model_color;
+
+    FragColor = vec4(aIllum + dIllum + sIllum, 1.0);
+}
+>>>>>>> 2ceab61d24043c004bc9996e50673bba397e7d56
