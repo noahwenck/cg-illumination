@@ -7,6 +7,7 @@ import { RawTexture } from '@babylonjs/core/Materials/Textures/rawTexture';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Vector2, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { KeyboardEventTypes } from '@babylonjs/core/Events/keyboardEvents';
+import { Animation } from '@babylonjs/core/Animations/animation';
 
 class Renderer {
     constructor(canvas, engine, material_callback, ground_mesh_callback) {
@@ -41,6 +42,8 @@ class Renderer {
         this.active_scene = 0;
         this.active_light = 0;
         this.shading_alg = 'gouraud';
+
+        this.update_light_pos = new Vector3(0.0, 0.0, 0.0);
 
         this.scenes.forEach((scene, idx) => {
             scene.materials = material_callback(scene.scene);
@@ -109,8 +112,15 @@ class Renderer {
         current_scene.models.push(sphere);
 
         this.addKeyBinds(scene);
+        // console.log(current_scene.lights[0]);
         // Animation function - called before each frame gets rendered
         scene.onBeforeRenderObservable.add(() => {
+            // new_light_pos = this.update_light_pos + current_scene.lights[this.active_light].get
+            current_scene.lights[this.active_light].position.x +=  this.update_light_pos.x;
+            current_scene.lights[this.active_light].position.y +=  this.update_light_pos.y;
+            current_scene.lights[this.active_light].position.z +=  this.update_light_pos.z;
+            this.update_light_pos = new Vector3(0.0, 0.0, 0.0);
+
 
             
             // update models and lights here (if needed)
@@ -124,6 +134,7 @@ class Renderer {
 
     createScene1(scene_idx){
         console.log("test");
+
     }
 
     updateShaderUniforms(scene_idx, shader) {
@@ -175,32 +186,33 @@ class Renderer {
         this.active_light = idx;
     }
 
+
     addKeyBinds(scene){
         scene.onKeyboardObservable.add((kbInfo) => {
             if (kbInfo.type == KeyboardEventTypes.KEYDOWN){
                 switch (kbInfo.event.key){
                     case "a":
-                        console.log("a");
+                        this.update_light_pos.x = -.1;
                         break;
                     
-                    case "s":
-                        console.log("s");
-                        break;
-
                     case "d":
-                        console.log("d");
-                        break;
-                
-                    case "w":
-                        console.log("w");
-                        break;
-                    
-                    case "r":
-                        console.log("r");
+                        this.update_light_pos.x = .1;
                         break;
 
                     case "f":
-                        console.log("f");
+                        this.update_light_pos.y = -.1;
+                        break;
+                
+                    case "r":
+                        this.update_light_pos.y = .1;
+                        break;
+                    
+                    case "w":
+                        this.update_light_pos.z = -.1;
+                        break;
+
+                    case "s":
+                        this.update_light_pos.z = .1;
                         break;
                 }
             }
