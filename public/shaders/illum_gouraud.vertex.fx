@@ -26,7 +26,7 @@ out vec2 model_uv;
 out vec3 diffuse_illum;
 out vec3 specular_illum;
 
-void main() {
+void main() { 
     // Normal Transformation and Other Vectors
     mat3 normTransform = inverse(transpose(mat3(world)));
     vec3 n = normalize(normTransform * normal);

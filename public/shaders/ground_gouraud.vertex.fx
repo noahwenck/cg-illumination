@@ -33,9 +33,31 @@ void main() {
     // Get initial position of vertex (prior to height displacement)
     vec4 world_pos = world * vec4(position, 1.0);
 
+    // Height Displacement
+    float gray = texture(heightmap, uv).r;
+    float d = 2.0 * height_scalar * (gray - 0.5); // Ask Prof about this
+    vec3 posChange = position;
+    posChange.y *= d;
+    world_pos.y *= d;
+
+    vec3 up = vec3(uv.x, uv.y + 1.0/ground_size.y, 0.0);
+    vec3 right = vec3(uv.x + 1.0/ground_size.x, uv.y, 0.0);
+    vec3 tangent = right - posChange;
+    vec3 bitangent = up - posChange;
+    vec3 normal = normalize(cross(tangent, bitangent));
+
+    // Normal Transformation and Other Vectors
+    mat3 normTransform = inverse(transpose(mat3(world)));
+    vec3 n = normalize(normTransform * normal);
+    vec3 l = normalize(normTransform * light_positions[0]);
+    vec3 r = normalize(reflect(l, n));
+    vec3 v = normalize(posChange - camera_position);
+
     // Pass diffuse and specular illumination onto the fragment shader
     diffuse_illum = vec3(0.0, 0.0, 0.0);
+    diffuse_illum = light_colors[0] * max(dot(n, l), 0.0);
     specular_illum = vec3(0.0, 0.0, 0.0);
+    specular_illum = light_colors[0] * (pow(max(dot(r, v), 0.0), mat_shininess));
 
     // Pass vertex texcoord onto the fragment shader
     model_uv = uv;

@@ -8,6 +8,9 @@ import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Vector2, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { KeyboardEventTypes } from '@babylonjs/core/Events/keyboardEvents';
 import { Animation } from '@babylonjs/core/Animations/animation';
+import { VertexData } from '@babylonjs/core/Meshes';
+import { Material } from '@babylonjs/core/Materials/material';
+import { Mesh } from '@babylonjs/core/Meshes/mesh';
 
 class Renderer {
     constructor(canvas, engine, material_callback, ground_mesh_callback) {
@@ -111,6 +114,22 @@ class Renderer {
         sphere.material = materials['illum_' + this.shading_alg];
         current_scene.models.push(sphere);
 
+        //let noahMesh = new Mesh("noah");
+
+        //let noahVertexData = new VertexData();
+        //noahVertexData.positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
+        //let positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
+        //let indices = [0, 1, 2, 3, 4, 5];
+        //noahVertexData.indices = [0, 1, 2, 3, 4, 5];
+        //noahVertexData.applyToMesh(noahMesh, true);
+        //noahVertexData.positions = positions;
+        //noahVertexData.indices = indices;
+        //let mat = new Material("mat", current_scene);
+       // mat.wireframe = true;
+        //noahMesh.material = mat;*/
+
+        //let knot = BABYLON.VertexData.Create
+
         this.addKeyBinds(scene);
         // console.log(current_scene.lights[0]);
         // Animation function - called before each frame gets rendered
@@ -133,7 +152,12 @@ class Renderer {
     }
 
     createScene1(scene_idx){
-        console.log("test");
+       
+       /* let noahMesh = new Mesh("noah")
+        let noahVertexData = new VertexData();
+        noahVertexData.positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
+        noahVertexData.indices = [0, 1, 2, 3, 4, 5];
+        noahVertexData.applyToMesh(noahMesh);*/
 
     }
 
