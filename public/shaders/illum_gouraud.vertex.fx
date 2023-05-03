@@ -30,9 +30,11 @@ void main() {
     // Normal Transformation and Other Vectors
     mat3 normTransform = inverse(transpose(mat3(world)));
     vec3 n = normalize(normTransform * normal);
-    vec3 l = normalize(normTransform * light_positions[0]);
-    vec3 r = normalize(reflect(l, n));
-    vec3 v = normalize(position - camera_position);
+    vec4 p = world * vec4(position, 1.0);
+    vec3 pWorld = vec3(p);
+    vec3 l = normalize(light_positions[0] - pWorld);
+    vec3 r = normalize(reflect(-l, n));
+    vec3 v = normalize(camera_position - pWorld);
 
     // Diffuse Illumination (Ignoring Color - In Fragment Shader)
     diffuse_illum = vec3(0.0, 0.0, 0.0);
