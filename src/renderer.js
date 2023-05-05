@@ -76,7 +76,8 @@ class Renderer {
         current_scene.camera.maxZ = 100.0;
 
         // Create point light sources
-        let light0 = new PointLight('light0', new Vector3(1.0, 1.0, 5.0), scene);
+        //let light0 = new PointLight('light0', new Vector3(1.0, 1.0, 5.0), scene);
+        let light0 = new PointLight('light0', new Vector3(5.0, 6.0, 6.0), scene);
         light0.diffuse = new Color3(1.0, 1.0, 1.0);
         light0.specular = new Color3(1.0, 1.0, 1.0);
         current_scene.lights.push(light0);
@@ -114,21 +115,54 @@ class Renderer {
         sphere.material = materials['illum_' + this.shading_alg];
         current_scene.models.push(sphere);
 
-        //let noahMesh = new Mesh("noah");
-
-        //let noahVertexData = new VertexData();
-        //noahVertexData.positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
-        //let positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
-        //let indices = [0, 1, 2, 3, 4, 5];
-        //noahVertexData.indices = [0, 1, 2, 3, 4, 5];
-        //noahVertexData.applyToMesh(noahMesh, true);
-        //noahVertexData.positions = positions;
-        //noahVertexData.indices = indices;
-        //let mat = new Material("mat", current_scene);
-       // mat.wireframe = true;
-        //noahMesh.material = mat;*/
-
-        //let knot = BABYLON.VertexData.Create
+        // Custom Model
+        let noah = new Mesh('noah', scene);
+        let vertex_positions = [
+            3.0, 3.0, 3.0,  // top Vertex
+            2.0, 2.0, 2.0,
+            4.0, 2.0, 2.0, 
+            2.0, 2.0, 4.0,  
+            4.0, 2.0, 4.0,
+            3.0, 3.0, 3.0,
+            3.0, 3.0, 3.0,
+            3.0, 3.0, 3.0,
+            2.0, 2.0, 2.0,
+            2.0, 2.0, 2.0,
+            4.0, 2.0, 2.0,
+            4.0, 2.0, 2.0,
+            4.0, 2.0, 2.0,
+            2.0, 2.0, 4.0,
+            2.0, 2.0, 4.0,
+            2.0, 2.0, 4.0,
+            4.0, 2.0, 4.0,
+            4.0, 2.0, 4.0
+        ];
+        let triangle_indices = [
+            0, 1, 2,
+            0, 2, 4,
+            0, 3, 4,
+            0, 1, 3,
+            1, 2, 3,
+            2, 3, 4
+        ];
+        let normals = [
+            //normals are dumb
+        ];   // as many as vertices, vertex per side
+        //VertexData.ComputeNormals(vertex_positions, triangle_indices, normals);
+        let vertex_data = new VertexData();
+        vertex_data.positions = vertex_positions;
+        vertex_data.indices = triangle_indices;
+        vertex_data.normals = normals;
+        vertex_data.applyToMesh(noah);
+        noah.metadata = {
+            mat_color: new Color3(0.10, 0.35, 0.88),
+            mat_texture: white_texture,
+            mat_specular: new Color3(0.8, 0.8, 0.8),
+            mat_shininess: 16,
+            texture_scale: new Vector2(1.0, 1.0)
+        }
+        noah.material = materials['illum_' + this.shading_alg];
+        current_scene.models.push(noah);
 
         this.addKeyBinds(scene);
         // console.log(current_scene.lights[0]);
@@ -153,11 +187,7 @@ class Renderer {
 
     createScene1(scene_idx){
        
-       /* let noahMesh = new Mesh("noah")
-        let noahVertexData = new VertexData();
-        noahVertexData.positions = [-5, 2, -3, -7, -2, -3, -3, -2, -3, 5, 2, 3, 7, -2, 3, 3, -2, 3];
-        noahVertexData.indices = [0, 1, 2, 3, 4, 5];
-        noahVertexData.applyToMesh(noahMesh);*/
+
 
     }
 
@@ -216,27 +246,27 @@ class Renderer {
             if (kbInfo.type == KeyboardEventTypes.KEYDOWN){
                 switch (kbInfo.event.key){
                     case "a":
-                        this.update_light_pos.x = -.1;
+                        this.update_light_pos.x = -1;
                         break;
                     
                     case "d":
-                        this.update_light_pos.x = .1;
+                        this.update_light_pos.x = 1;
                         break;
 
                     case "f":
-                        this.update_light_pos.y = -.1;
+                        this.update_light_pos.y = -1;
                         break;
                 
                     case "r":
-                        this.update_light_pos.y = .1;
+                        this.update_light_pos.y = 1;
                         break;
                     
                     case "w":
-                        this.update_light_pos.z = -.1;
+                        this.update_light_pos.z = -1;
                         break;
 
                     case "s":
-                        this.update_light_pos.z = .1;
+                        this.update_light_pos.z = 1;
                         break;
                 }
             }
