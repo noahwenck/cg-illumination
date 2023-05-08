@@ -150,9 +150,8 @@ class Renderer {
             current_scene.lights[this.active_light].position.y +=  this.update_light_pos.y;
             current_scene.lights[this.active_light].position.z +=  this.update_light_pos.z;
             this.update_light_pos = new Vector3(0.0, 0.0, 0.0);
-
-
             
+           
             // update models and lights here (if needed)
             // ...
 
@@ -261,10 +260,26 @@ class Renderer {
         }
         noah.material = materials['illum_' + this.shading_alg];
         current_scene.models.push(noah);
+        this.addKeyBinds(scene);
+        // console.log(current_scene.lights[0]);
+        // Animation function - called before each frame gets rendered
+
+        scene.onBeforeRenderObservable.add(() => {
+            // new_light_pos = this.update_light_pos + current_scene.lights[this.active_light].get
+            current_scene.lights[this.active_light].position.x +=  this.update_light_pos.x;
+            current_scene.lights[this.active_light].position.y +=  this.update_light_pos.y;
+            current_scene.lights[this.active_light].position.z +=  this.update_light_pos.z;
+            this.update_light_pos = new Vector3(0.0, 0.0, 0.0);
+
+
+            
+            // update models and lights here (if needed)
+            // ...
 
             // update uniforms in shader programs
             this.updateShaderUniforms(scene_idx, materials['illum_' + this.shading_alg]);
             this.updateShaderUniforms(scene_idx, materials['ground_' + this.shading_alg]);
+        });
 
     }
 
@@ -303,7 +318,7 @@ class Renderer {
         // Create ground mesh
         let white_texture = RawTexture.CreateRGBTexture(new Uint8Array([255, 255, 255]), 1, 1, scene);
         let earth = new Texture('https://www.babylonjs-playground.com/textures/earth.jpg', scene);
-        let ground_heightmap = new Texture('/heightmaps/default.png', scene);
+        let ground_heightmap = new Texture(BASE_URL + '/heightmaps/default.png', scene);
         ground_mesh.scaling = new Vector3(50.0, 2.0, 20.0);
         ground_mesh.metadata = {
             mat_color: new Color3(1.0, 0.0, 0.0),
@@ -385,8 +400,7 @@ class Renderer {
         current_scene.camera.maxZ = 100.0;
 
         let white_texture = RawTexture.CreateRGBTexture(new Uint8Array([255, 255, 255]), 1, 1, scene);
-        let metal = new Texture('https://www.babylonjs-playground.com/textures/reflectivity', scene);
-        let ground_heightmap = new Texture('/heightmaps/default.png', scene);
+        let ground_heightmap = new Texture(BASE_URL + '/heightmaps/default.png', scene);
 
         // Create point light sources
         //let light0 = new PointLight('light0', new Vector3(1.0, 1.0, 5.0), scene);
@@ -446,30 +460,30 @@ class Renderer {
 
 
 
-        // let light3 = new PointLight('light3', new Vector3(5.0, 8.0, 0.0), scene);
-        // light1.diffuse = new Color3(1.0, 0.0, 1.0);
-        // light1.specular = new Color3(1.0, 1.0, 1.0);
-        // current_scene.lights.push(light3);
+        let light3 = new PointLight('light3', new Vector3(20.0, 10.0, 20.0), scene);
+        light1.diffuse = new Color3(1.0, 1.0, 0.0);
+        light1.specular = new Color3(1.0, 1.0, 1.0);
+        current_scene.lights.push(light3);
 
-        // let light4 = new PointLight('light4', new Vector3(5.0, 8.0, 0.0), scene);
-        // light1.diffuse = new Color3(1.0, 0.0, 1.0);
-        // light1.specular = new Color3(1.0, 1.0, 1.0);
-        // current_scene.lights.push(light4);
+        let light4 = new PointLight('light4', new Vector3(0.0, 10.0, 20.0), scene);
+        light1.diffuse = new Color3(0.0, 1.0, 1.0);
+        light1.specular = new Color3(1.0, 1.0, 1.0);
+        current_scene.lights.push(light4);
 
-        // let light5 = new PointLight('light5', new Vector3(5.0, 8.0, 0.0), scene);
-        // light1.diffuse = new Color3(1.0, 0.0, 1.0);
-        // light1.specular = new Color3(1.0, 1.0, 1.0);
-        // current_scene.lights.push(light5);
+        let light5 = new PointLight('light5', new Vector3(-20.0, 10.0, 20.0), scene);
+        light1.diffuse = new Color3(1.0, 0.0, 1.0);
+        light1.specular = new Color3(1.0, 1.0, 1.0);
+        current_scene.lights.push(light5);
 
-        // let light6 = new PointLight('light6', new Vector3(5.0, 8.0, 0.0), scene);
-        // light1.diffuse = new Color3(1.0, 0.0, 1.0);
-        // light1.specular = new Color3(1.0, 1.0, 1.0);
-        // current_scene.lights.push(light6);
+        let light6 = new PointLight('light6', new Vector3(-20.0, 10.0, 0.0), scene);
+        light1.diffuse = new Color3(1.0, 1.0, 1.0);
+        light1.specular = new Color3(1.0, 1.0, 1.0);
+        current_scene.lights.push(light6);
 
-        // let light7 = new PointLight('light7', new Vector3(5.0, 8.0, 0.0), scene);
-        // light1.diffuse = new Color3(1.0, 0.0, 1.0);
-        // light1.specular = new Color3(1.0, 1.0, 1.0);
-        // current_scene.lights.push(light7);
+        let light7 = new PointLight('light7', new Vector3(-20.0, 10.0, 20.0), scene);
+        light1.diffuse = new Color3(.5, .3, .7);
+        light1.specular = new Color3(1.0, 1.0, 1.0);
+        current_scene.lights.push(light7);
 
 
 
