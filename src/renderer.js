@@ -12,6 +12,8 @@ import { CreateBox, VertexData } from '@babylonjs/core/Meshes';
 import { Material } from '@babylonjs/core/Materials/material';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 class Renderer {
     constructor(canvas, engine, material_callback, ground_mesh_callback) {
         this.canvas = canvas;
@@ -113,7 +115,7 @@ class Renderer {
 
         // Create ground mesh
         let white_texture = RawTexture.CreateRGBTexture(new Uint8Array([255, 255, 255]), 1, 1, scene);
-        let ground_heightmap = new Texture('/heightmaps/default.png', scene);
+        let ground_heightmap = new Texture(BASE_URL + 'heightmaps/default.png', scene);
         ground_mesh.scaling = new Vector3(20.0, 1.0, 20.0);
         ground_mesh.metadata = {
             mat_color: new Color3(0.10, 0.65, 0.15),
@@ -142,42 +144,57 @@ class Renderer {
         // Custom Model
         let noah = new Mesh('noah', scene);
         let vertex_positions = [
-            3.0, 3.0, 3.0,  // top Vertex
-            2.0, 2.0, 2.0,
-            4.0, 2.0, 2.0, 
-            2.0, 2.0, 4.0,  
-            4.0, 2.0, 4.0,
             3.0, 3.0, 3.0,
-            3.0, 3.0, 3.0,
-            3.0, 3.0, 3.0,
-            2.0, 2.0, 2.0,
-            2.0, 2.0, 2.0,
-            4.0, 2.0, 2.0,
-            4.0, 2.0, 2.0,
-            4.0, 2.0, 2.0,
-            2.0, 2.0, 4.0,
-            2.0, 2.0, 4.0,
-            2.0, 2.0, 4.0,
-            4.0, 2.0, 4.0,
-            4.0, 2.0, 4.0
+            4.0, 4.0, 3.0,
+            3.0, 5.0, 3.0,
+            2.0, 4.0, 3.0, 
+            2.0, 3.0, 2.0,
+            2.0, 5.0, 2.0,
+            4.0, 3.0, 2.0, 
+            4.0, 5.0, 2.0,
+
+            //back
+            3.0, 3.0, 1.0,  //8
+            4.0, 4.0, 1.0,
+            3.0, 5.0, 1.0,
+            2.0, 4.0, 1.0, 
         ];
         let triangle_indices = [
+            //face
             0, 1, 2,
-            0, 2, 4,
+            0, 2, 3,
+            //corners
             0, 3, 4,
-            0, 1, 3,
-            1, 2, 3,
-            2, 3, 4
+            2, 3, 5,
+            0, 1, 6,
+            2, 1, 7,
+            //sides
+            3, 4, 5,
+            2, 5, 7,
+            1, 6, 7,
+            0, 4, 6,
+
+            //back
+            8, 9, 10,
+            8, 10, 11,
+            //corners
+            8, 11, 4,
+            10, 11, 5,
+            8, 9, 6,
+            10, 9, 7,
+            //sides
+            11, 4, 5,
+            10, 5, 7,
+            9, 6, 7,
+            8, 4, 6
         ];
-        let normals = [
-            //normals are dumb
-        ];   // as many as vertices, vertex per side
-        //VertexData.ComputeNormals(vertex_positions, triangle_indices, normals);
+        let normals = [];
+        VertexData.ComputeNormals(vertex_positions, triangle_indices, normals);
         let vertex_data = new VertexData();
         vertex_data.positions = vertex_positions;
         vertex_data.indices = triangle_indices;
         vertex_data.normals = normals;
-        vertex_data.applyToMesh(noah);
+        vertex_data.applyToMesh(noah, true);
         noah.metadata = {
             mat_color: new Color3(0.10, 0.35, 0.88),
             mat_texture: white_texture,
