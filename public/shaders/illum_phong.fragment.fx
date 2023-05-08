@@ -39,7 +39,7 @@ void main() {
         vec3 l = normalize(light_positions[i]);
         vec3 illum_b = light_colors[0] * max(dot(n, l), 0.0);
 
-        vec3 r = (2.0 * (max(dot(n, l), 0.0)) * n) - l;
+        vec3 r = normalize(reflect(-l, n));
         vec3 illum_s = mat_specular * pow(max((dot(r, v)), 0.0) , mat_shininess);
 
         illum_b_total += illum_b;

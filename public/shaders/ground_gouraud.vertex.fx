@@ -38,37 +38,34 @@ void main() {
     float d = 2.0 * height_scalar * (gray - 0.5);
     world_pos.y += d;
     vec3 p = vec3(world_pos);
-//From here is the problem section
 
-    //vec3 up = vec3(uv.x, uv.y + 1.0/ground_size.y, 0.0);    //these are wrong
-    //up = (world_pos.x + 1, NEW HEIGHT DISPLACEMENT VALUE
     vec2 uvUp = vec2(uv.x, uv.y + 1.0/ground_size.x);
     vec2 uvRight = vec2(uv.x + 1.0/ground_size.x, uv.y);
     gray = texture(heightmap, uvUp).r;
     d = 2.0 * height_scalar * (gray - 0.5);
     float worldIncreaseX = 1.0/ground_size.x * texture_scale.x;
     float worldIncreaseY = 1.0/ground_size.x * texture_scale.y;
-    vec3 up = vec3(world_pos.x, d, world_pos.z + 1.0);
-
+    vec3 right = vec3(world_pos.x, d, world_pos.z + 1.0);
+    // might have switched up and right but it works
     gray = texture(heightmap, uvRight).r;
     d = 2.0 * height_scalar * (gray - 0.5);
-    vec3 right = vec3(world_pos.x + 1.0, d, world_pos.z);
-// To here
+    vec3 up = vec3(world_pos.x + 1.0, d, world_pos.z);
 
-    //vec3 right = vec3(uv.x + 1.0/ground_size.x, uv.y, 0.0);
     vec3 tangent = right - p;
     vec3 bitangent = up - p;
     vec3 normal = normalize(cross(tangent, bitangent));
-
-    vec3 l = normalize(light_positions[0] - p);
-    vec3 r = normalize(reflect(-l, normal));
-    vec3 v = normalize(camera_position - p);
-
-    // Pass diffuse and specular illumination onto the fragment shader
     diffuse_illum = vec3(0.0, 0.0, 0.0);
-    diffuse_illum = light_colors[0] * max(dot(normal, l), 0.0);
     specular_illum = vec3(0.0, 0.0, 0.0);
-    specular_illum = light_colors[0] * (pow(max(dot(r, v), 0.0), mat_shininess));
+
+    for (int i = 0; i < num_lights; i++) {
+        vec3 l = normalize(light_positions[i] - p);
+        vec3 r = normalize(reflect(l, normal));
+        vec3 v = normalize(camera_position - p);
+
+        // Pass diffuse and specular illumination onto the fragment shader
+        diffuse_illum += light_colors[i] * max(dot(normal, l), 0.0);
+        specular_illum += light_colors[i] * (pow(max(dot(r, v), 0.0), mat_shininess));
+    }
 
     // Pass vertex texcoord onto the fragment shader
     model_uv = uv;
