@@ -16,6 +16,7 @@ uniform vec2 texture_scale;
 
 // Output
 out vec3 model_normal;
+out vec3 FragPos;
 out vec2 model_uv;
 
 void main() {
@@ -26,7 +27,7 @@ void main() {
 
     // Pass vertex texcoord onto the fragment shader
     model_uv = uv;
-
+    FragPos = normTransform * position;
     // Transform and project vertex from 3D world-space to 2D screen-space
-    gl_Position = projection * view * world * vec4(position, 1.0);;
+    gl_Position = projection * view * world * vec4(position, 1.0);
 }
