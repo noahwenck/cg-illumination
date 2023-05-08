@@ -3,6 +3,7 @@ precision mediump float;
 
 // Input
 in vec3 model_normal;
+in vec3 FragPos;
 in vec2 model_uv;
 
 // Uniforms
@@ -30,16 +31,16 @@ void main() {
 
     vec3 illum_a = ambient;
 
-    vec3 v = normalize(camera_position);
+    vec3 v = normalize(camera_position - FragPos);
 
     vec3 illum_b_total = vec3(0, 0, 0);
     vec3 illum_s_total = vec3(0, 0, 0);
     
-    for (int i = 0; i < num_lights; i++){
-        vec3 l = normalize(light_positions[i]);
-        vec3 illum_b = light_colors[0] * max(dot(n, l), 0.0);
+    for (int i = 0; i < 1; i++){
+        vec3 l = normalize(light_positions[i] - FragPos);
+        vec3 illum_b = light_colors[i] * max(dot(n, l), 0.0);
 
-        vec3 r = (2.0 * (max(dot(n, l), 0.0)) * n) - l;
+        vec3 r = normalize(reflect(-l, n));
         vec3 illum_s = mat_specular * pow(max((dot(r, v)), 0.0) , mat_shininess);
 
         illum_b_total += illum_b;
@@ -48,7 +49,7 @@ void main() {
     }
    
 
-    FragColor = vec4(mat_color * texture(mat_texture, model_uv).rgb, 1.0);
+    // FragColor = vec4(mat_color * texture(mat_texture, model_uv).rgb, 1.0);
 
     FragColor = vec4((illum_a + illum_b_total + illum_s_total)* mat_color * texture(mat_texture, model_uv).rgb, 1.0);
 }
