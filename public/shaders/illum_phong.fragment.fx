@@ -36,12 +36,12 @@ void main() {
     vec3 illum_b_total = vec3(0, 0, 0);
     vec3 illum_s_total = vec3(0, 0, 0);
     
-    for (int i = 0; i < 1; i++){
+    for (int i = 0; i < num_lights; i++){
         vec3 l = normalize(light_positions[i] - FragPos);
         vec3 illum_b = light_colors[i] * max(dot(n, l), 0.0);
 
         vec3 r = normalize(reflect(-l, n));
-        vec3 illum_s = mat_specular * pow(max((dot(r, v)), 0.0) , mat_shininess);
+        vec3 illum_s = light_colors[i] * mat_specular * pow(max((dot(r, v)), 0.0) , mat_shininess);
 
         illum_b_total += illum_b;
         illum_s_total += illum_s;
@@ -51,5 +51,5 @@ void main() {
 
     // FragColor = vec4(mat_color * texture(mat_texture, model_uv).rgb, 1.0);
 
-    FragColor = vec4((illum_a + illum_b_total + illum_s_total)* mat_color * texture(mat_texture, model_uv).rgb, 1.0);
+    FragColor = vec4((illum_a + illum_b_total)* mat_color * texture(mat_texture, model_uv).rgb + illum_s_total, 1.0);
 }

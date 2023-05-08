@@ -63,7 +63,7 @@ void main() {
     gl_Position = projection * view * world_pos;
 
 
-    FragPos = position;
+    FragPos = normTransform  * position;
     // // Get initial position of vertex (prior to height displacement)
     // vec4 world_pos = world * vec4(position, 1.0);
 
